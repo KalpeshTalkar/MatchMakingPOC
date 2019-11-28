@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="breathing_space">20dp</dimen>
+
+    <dimen name="profile_pic_size">90dp</dimen>
+    <dimen name="profile_pic_corner_radius">45dp</dimen>
+
+    <dimen name="elevation">8dp</dimen>
+
+    <dimen name="action_btn_size">60dp</dimen>
+
+</resources>

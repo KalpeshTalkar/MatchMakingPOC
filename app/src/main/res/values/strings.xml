@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">MatchMakingPOC</string>
+    <string name="matches">Matches based on your preference</string>
+</resources>
