@@ -32,12 +32,11 @@ class MatchViewModel(application: Application) : AndroidViewModel(application) {
                     val result = JSON.nonstrict.parse(MatchResults.serializer(), response)
                     matchResults.postValue(result)
                     realm.executeTransactionAsync { rlm ->
-                        matchResults.value?.let { mResults ->
-                            for (person in mResults.results) {
-                                rlm.insertOrUpdate(person)
-                            }
+                        for (person in result.results) {
+                            rlm.insertOrUpdate(person)
                         }
                     }
+
                 } catch (e: Exception) {
                     val result = MatchResults(ArrayList())
                     result.error =
@@ -63,15 +62,20 @@ class MatchViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun updateInterestStatus(person: Person, interested: Boolean) {
-        realm.executeTransactionAsync {
-            person.interestStatus =
-                if (interested) MEMBER_ACCEPTED_MESSAGE else MEMBER_DECLINED_MESSAGE
-            it.insertOrUpdate(person)
+        person.interestStatus = if (interested) MEMBER_ACCEPTED_MESSAGE else MEMBER_DECLINED_MESSAGE
+        doAsync {
+            Realm.getDefaultInstance().executeTransaction { realm ->
+                person.interestStatus =
+                    if (interested) MEMBER_ACCEPTED_MESSAGE else MEMBER_DECLINED_MESSAGE
+                realm.insertOrUpdate(person)
+            }
         }
     }
 
     override fun onCleared() {
-        realm.close()
+        doAsync {
+            realm.close()
+        }
         super.onCleared()
     }
 
